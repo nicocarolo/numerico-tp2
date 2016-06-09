@@ -1,4 +1,4 @@
-function [T U E]=Nys(f_u,T0,U0,h)
+function [T U E]=nystrom(f_u,T0,U0,h)
 a=T0(1);
 b=T0(2);
 M=(b-a)/h;
@@ -30,3 +30,9 @@ end
 U(M+1,2)=(U(M+1,1)-U(M,1))/h;
 % Energia
 E(M+1)=Energia(U(M+1,:));
+
+function out=Energia(u)
+%% Función a evaluar
+% En principio va a depender de t (no autonomo) y de u, no de u'.
+%
+out=[1/2*u(2)^2+1/2*u(1)^2*(1+1/2*u(1)^2)];

@@ -1,4 +1,4 @@
-function rk4_systems(a, b, N, alpha)
+function rk4(a, b, N, alpha)
 
 %function rk4_systems() approximates the solutions of systems of m
 %differential equations that are written in the form
@@ -21,6 +21,13 @@ function rk4_systems(a, b, N, alpha)
 
 %Author: Alain G. Kapitho
 %Date  : Jan. 2006
+
+%Function rk4_sstems() approximates the solution of a systems of m differential 
+%equations that are written in the form dy1/dt = f1(t,y1,...,ym) - ... - 
+%dym/dt = fm(t,y1,...,ym); with t in the interval [a; b], N is the number of 
+%subintervals (related to the step size), and alpha is the m-dimensional vector 
+%gathering all the initial conditions. The user needs to specify the system of 
+%ODE as a sub-function in the m-file before proceeding to command line
 
 m = size(alpha,1);
 if m == 1

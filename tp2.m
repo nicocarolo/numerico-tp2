@@ -1,10 +1,10 @@
 %function [T U]=Euler_SEDO(f,a,b,u0,h)
-%      v    v' 
+%      v    v'
 %    | u0  v0 |
 % U =| u1  v1 |
 %    | ..  .. |
 
-pkg load odepkg;
+% pkg load odepkg;
 f = 'uprima';
 a = 0;
 b = 1;
@@ -30,9 +30,19 @@ h = 0.1;
   for j=1:cantIntervalos
    U(j+1,:)=U(j,:)+h*feval(f,ptosIntervalo(j),U(j,:));
   end
-  
-  
-  printf ("resultado con z =  %d\n")
-  plot(ptosIntervalo,U(:,1),'c',ptosIntervalo,U(:,2),'r');
+
+
+% printf (resultado con z = %d\n, z)
+%  plot(ptosIntervalo,U(:,1),'c',ptosIntervalo,U(:,2),'r');
   ptosIntervalo
   U
+
+T0=[0 10];
+Y0=[1 0];
+h=0.1;
+% Metodos de paso fijo
+[T YNys ENys]=nystrom('f_u',T0,Y0,h);
+[T YRK2 ERK2]=rk2('f_uv',T0,Y0,h);
+
+YNys
+YRK2

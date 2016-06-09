@@ -1,5 +1,5 @@
 
-function [T U E]=RK2(f,T0,U0,h)
+function [T U E]=rk2(f,T0,U0,h)
 a=T0(1);
 b=T0(2);
 M=(b-a)/h;
@@ -22,19 +22,8 @@ for j=1:M
  E(j+1)=Energia(U(j+1,:));
 end
 
-function out=f_u(t,u)
-%% Función a evaluar
-% En principio va a depender de t (no autonomo) y de u, no de u'.
-%
-out=[-u*(1+u^2)];
-
 function out=Energia(u)
 %% Función a evaluar
 % En principio va a depender de t (no autonomo) y de u, no de u'.
 %
 out=[1/2*u(2)^2+1/2*u(1)^2*(1+1/2*u(1)^2)];
-function out=f_uv(t,u)
-%% Función a evaluar
-% En principio va a depender de t (no autonomo) y de u, no de u'.
-%
-out=[u(2) -u(1)*(1+u(1)^2)];
