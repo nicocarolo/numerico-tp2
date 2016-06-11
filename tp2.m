@@ -1,4 +1,4 @@
-%function [T U]=Euler_SEDO(f,a,b,u0,h)
+
 %      v    v'
 %    | u0  v0 |
 % U =| u1  v1 |
@@ -15,34 +15,36 @@ h = 0.1;
 %ode = @(t,u) uprima(t,u);
 %[t,u] = ode23(ode,[0 1],u0,options);
 
+%        Matriz de soluciones:
+%4ta columna = indice epsylon [1,2,..,5]
+%3er columna = indice metodo
+%     [Euler => 1]
+%     [RK2 => 2]
+%     [RK4 => 3]
+%     [Nystrom => 4]
+%     [ODE23 => 5]
+%     [ODE35 => 6]
+soluciones = zeros(11,2,6,5);
 
-  cantIntervalos=(b-a)/h;
-  N=length(u0);
-  ptosIntervalo=zeros(cantIntervalos+1,1);
-  U=zeros(cantIntervalos+1,N);
-  ptosIntervalo=a:h:b;
-  ptosIntervalo=ptosIntervalo';
+epsylon = 1;
+for epsylon=1:1
+  
+  [T UEuler] = Euler(f,a,b,u0,h,epsylon);
+  soluciones(:,:,1,epsylon) = UEuler;
+  [T YRK2 ERK2]=rk2(f,a,b,u0,h,epsylon);
+  soluciones(:,:,2,epsylon) = YRK2;
+  % Metodos de paso fijo
+  
+  %falta ver la funcion a usar en nystrom
+  [T YNys ENys]=nystrom('f_u',a,b,Y0,h);
+  soluciones(:,:,4,epsylon) = YNys;
 
-  for i=1:N
-   U(1,i)=u0(i);
-  end
-
-  for j=1:cantIntervalos
-   U(j+1,:)=U(j,:)+h*feval(f,ptosIntervalo(j),U(j,:));
-  end
-
+end
 
 % printf (resultado con z = %d\n, z)
 %  plot(ptosIntervalo,U(:,1),'c',ptosIntervalo,U(:,2),'r');
-  ptosIntervalo
-  U
 
-T0=[0 10];
-Y0=[1 0];
-h=0.1;
-% Metodos de paso fijo
-[T YNys ENys]=nystrom('f_u',T0,Y0,h);
-[T YRK2 ERK2]=rk2('f_uv',T0,Y0,h);
+soluciones(:,:,1,1) %Euler con epsylon 1
+soluciones(:,:,2,1) %RK2 con epsylon 2
+soluciones(:,:,4,1) %RK2 con epsylon 2
 
-YNys
-YRK2

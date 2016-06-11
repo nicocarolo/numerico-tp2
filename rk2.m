@@ -1,21 +1,23 @@
 
-function [T U E]=rk2(f,T0,U0,h)
-a=T0(1);
-b=T0(2);
+function [T U E]=rk2(f,a,b,U0,h,epsylon)
 M=(b-a)/h;
 T=zeros(M+1,1);
 U=zeros(M+1,2);
 E=zeros(M+1,1);
 U(1,:)=U0;
 T(1)=a;
+
 % Energia
 E(1)=Energia(U(1,:));
+
 for j=1:M
  % Valor del tiempo posterior.
  T(j+1)= a+j*h;
+ 
  % Calculo del q1 y q2.
- q1= h*feval(f,T(j),U(j,:));
- q2= h*feval(f,T(j)+h,U(j,:)+q1);
+ q1= h*feval(f,T(j),U(j,:),epsylon);
+ q2= h*feval(f,T(j)+h,U(j,:)+q1,epsylon);
+ 
  % Calculo del valor de U en el paso siguiente.
  U(j+1,:) = U(j,:) + (q1+q2)/2;
  % Energia
