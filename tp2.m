@@ -26,6 +26,7 @@ soluciones = zeros(11,2,6,5);
 
 figure(1,'Name', 'v(t) vs t','Position',[50,50,1600,750]);
 figure(2,'Name', 'v´(t) vs t','Position',[50,50,1600,750]);
+figure(3,'Name', 'v(t) vs v´(t)','Position',[50,50,1600,750]);
 epsylon = 1;
 for epsylon=1:5
   
@@ -64,6 +65,16 @@ for epsylon=1:5
   title(strcat('Epsylon = ' , num2str(epsylon)));
   xlabel('v´(t)');
   ylabel('t');
+  legend('Euler','RK2','RK4','Nystrom','ODE23','ODE45','Location','west');
+  legend('boxoff');
+  
+  figure(3)
+  subplot (2, 3, epsylon);
+  plot(soluciones(:,1,1,epsylon),soluciones(:,2,1,epsylon),'c',soluciones(:,1,2,epsylon),soluciones(:,2,2,epsylon),'r',soluciones(:,1,3,epsylon),soluciones(:,2,3,epsylon),'g'
+  ,soluciones(:,1,4,epsylon),soluciones(:,2,4,epsylon),'m',soluciones(:,1,5,epsylon),soluciones(:,2,5,epsylon),'-bo',soluciones(:,1,6,epsylon),soluciones(:,2,6,epsylon),'k');
+  title(strcat('Epsylon = ' , num2str(epsylon)));
+  xlabel('v(t)');
+  ylabel('v´(t)');
   legend('Euler','RK2','RK4','Nystrom','ODE23','ODE45','Location','west');
   legend('boxoff');
 end
