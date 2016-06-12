@@ -1,64 +1,30 @@
-function rk4(a, b, N, alpha)
+function [T U]=rk4(f,a,b,U0,h,epsylon)
+M=(b-a)/h;
+T=zeros(M+1,1);
+U=zeros(M+1,2);
+%E=zeros(M+1,1);
+U(1,:)=U0;
+T(1)=a;
 
-%function rk4_systems() approximates the solutions of systems of m
-%differential equations that are written in the form
+%for i = 1:N
+%   k1 = h*f(t(i), w(:,i));
+%   k2 = h*f(t(i)+h/2, w(:,i)+0.5*k1);
+%   k3 = h*f(t(i)+h/2, w(:,i)+0.5*k2);
+%   k4 = h*f(t(i)+h, w(:,i)+k3);
+%   w(:,i+1) = w(:,i) + (k1 + 2*k2 + 2*k3 + k4)/6;
+%   t(i+1) = a + i*h;
+%end
 
-%dy1/dt = f1(t,y1,y2,...,ym)
-%dy2/dt = f2(t,y1,y2,...,ym)
-%.
-%.
-%.
-%dym/dt = fm(t,y1,y2,...,ym)
-
-%with t in the interval [a; b] and the initial conditions are in the
-%m-dimensional vector alpha
-%as with function runge_kutta4(), the inputs are the endpoints a and b, the
-%number of subdivisions N in the interval [a; b], and the initial
-%conditions - but this time, the initial condition is a vector
-
-%The algorithmic scheme in this file was drawn from the book of Burden & Faires
-%Numerical Analysis, 7th Ed.
-
-%Author: Alain G. Kapitho
-%Date  : Jan. 2006
-
-%Function rk4_sstems() approximates the solution of a systems of m differential 
-%equations that are written in the form dy1/dt = f1(t,y1,...,ym) - ... - 
-%dym/dt = fm(t,y1,...,ym); with t in the interval [a; b], N is the number of 
-%subintervals (related to the step size), and alpha is the m-dimensional vector 
-%gathering all the initial conditions. The user needs to specify the system of 
-%ODE as a sub-function in the m-file before proceeding to command line
-
-m = size(alpha,1);
-if m == 1
-   alpha = alpha';
+for j=1:M
+ % Valor del tiempo posterior.
+ T(j+1)= a+j*h;
+ 
+ % Calculo del q1 y q2.
+ q1= h*feval(f,T(j),U(j,:),epsylon);
+ q2= h*feval(f,T(j)+h/2,U(j,:)+0.5*q1,epsylon);
+ q3= h*feval(f,T(j)+h/2,U(j,:)+0.5*q2,epsylon);
+ q4= h*feval(f,T(j)+h/2,U(j,:)+0.5*q3,epsylon);
+ 
+ % Calculo del valor de U en el paso siguiente.
+ U(j+1,:) = U(j,:) + (q1+2*q2+2*q3+q4)/6;
 end
-
-h = (b-a)/N;        %the step size
-t(1) = a;
-w(:,1) = alpha;     %initial conditions
-
-for i = 1:N
-   k1 = h*f(t(i), w(:,i));
-   k2 = h*f(t(i)+h/2, w(:,i)+0.5*k1);
-   k3 = h*f(t(i)+h/2, w(:,i)+0.5*k2);
-   k4 = h*f(t(i)+h, w(:,i)+k3);
-   w(:,i+1) = w(:,i) + (k1 + 2*k2 + 2*k3 + k4)/6;
-   t(i+1) = a + i*h;
-end
-
-
-[t' w']
-
-
-%function relating the right-hand side of the differential equation
-%it has to be changed accordingly to the problem at hand
-%in this case, the system of differential equations is:
-%dy1/dt = y2
-%dy2/dt = -y1 - 2exp(t) + 1
-%dy3/dt = -y1 - exp(t) + 1
-%change it before proceeding to the command line
-function dy = f(t, y)
-dy = [y(2);
-     -y(1) - 2*exp(t) + 1;
-     -y(1) - exp(t) + 1];
