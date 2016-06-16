@@ -41,7 +41,7 @@ for epsylon=1:1
   [T YNys]=nyst(f,a,b,u0,h,epsylon);
 %  T'
 %  YRK2'
-  YNys'
+%  YNys'
   
   soluciones(:,:,4,epsylon) = YNys;
   ode = @(t,u) uprima(t,u,epsylon);
