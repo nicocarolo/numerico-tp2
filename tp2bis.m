@@ -15,12 +15,12 @@ options = odeset;
 %        Matriz de soluciones:
 %4ta columna = indice epsylon [1,2,..,5]
 %3er columna = indice metodo
-%     [Euler => 1]
+%     [Euler => 1] Modificado porque Euler distinto h => distinto tamanio
 %     [RK2 => 2]
 %     [RK4 => 3]
 %     [Nystrom => 4]
-%     [ODE23 => 5]
-%     [ODE25 => 6]
+%     [ODE23 => 5] Modificado porque Ode23 distinto h => distinto tamanio
+%     [ODE25 => 6] Modificado porque Ode45 distinto h => distinto tamanio
 soluciones = zeros(((b-a)/h)+1,2,6,5);
 
 figure(1,'Name', 'v(t) vs t','Position',[50,50,1600,750]);
@@ -41,19 +41,17 @@ figure(15,'Name', 'v(t) vs v´(t)','Position',[50,50,1600,750]);
 for epsylon=1:5
   
   [TEuler UEuler] = Euler(f,a,b,u0,0.0001,epsylon);
-%  soluciones(:,:,1,epsylon) = UEuler;
+  
   [T YRK2 ERK2]=rk2(f,a,b,u0,h,epsylon);
   soluciones(:,:,2,epsylon) = YRK2;
   [T YRK4]=rk4(f,a,b,u0,h,epsylon);
   soluciones(:,:,3,epsylon) = YRK4;
   
-  [T YNys]=nyst(f,a,b,u0,h,epsylon);
-  
+  [T YNys]=nyst(f,a,b,u0,h,epsylon);  
   soluciones(:,:,4,epsylon) = YNys;
+  
   ode = @(t,u) uprima(t,u,epsylon);
   [t23,u23] = ode23(ode,[a b],u0,options);
-%  t23'
-%  soluciones(:,:,5,epsylon) = u;
   [t45,u45] = ode45(ode,[a b],u0,options);
   
 % Grafico de v(t) vs t
@@ -66,7 +64,7 @@ for epsylon=1:5
   ylabel('v(t)');
   legend('Euler','RK2','RK4','Nystrom','ODE23','ODE45','Location','eastoutside');
   legend('boxoff');
-  print(strcat(num2str(epsylon),"vt.jpg"), "-djpg")
+%  print(strcat(num2str(epsylon),"vt.jpg"), "-djpg")
   close((epsylon*3)-2)
  % Grafico de v´(t) vs t
   figure((epsylon*3)-1)
@@ -78,7 +76,7 @@ for epsylon=1:5
   ylabel('v´(t)');
   legend('Euler','RK2','RK4','Nystrom','ODE23','ODE45','Location','eastoutside');
   legend('boxoff');
-  print(strcat(num2str(epsylon),"v´t.jpg"), "-djpg")
+%  print(strcat(num2str(epsylon),"v´t.jpg"), "-djpg")
   close((epsylon*3)-1)
   
  % Grafico de v´(t) vs v(t)
@@ -91,6 +89,6 @@ for epsylon=1:5
   ylabel('v´(t)');
   legend('Euler','RK2','RK4','Nystrom','ODE23','ODE45','Location','eastoutside');
   legend('boxoff');
-  print(strcat(num2str(epsylon),"vv´.jpg"), "-djpg")
+%  print(strcat(num2str(epsylon),"vv´.jpg"), "-djpg")
   close((epsylon*3))
 end
